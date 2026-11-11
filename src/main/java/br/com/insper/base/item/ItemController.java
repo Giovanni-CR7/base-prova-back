@@ -16,11 +16,11 @@ public class ItemController {
     @GetMapping
     public Page<ItemResponse> listar(
         @RequestParam(defaultValue = "") String busca,
-        @RequestParam(defaultValue = "") String categoria,
+        @RequestParam(defaultValue = "") String prioridade,
         @RequestParam(defaultValue = "0") int pagina,
         @RequestParam(defaultValue = "8") int tamanho,
         @RequestParam(defaultValue = "recentes") String ordem) {
-        return service.listar(busca, categoria, pagina, tamanho, ordem);
+        return service.listar(busca, prioridade, pagina, tamanho, ordem);
     }
     @GetMapping("/{id}")
     public ItemResponse buscar(@PathVariable Long id) { return service.buscar(id); }

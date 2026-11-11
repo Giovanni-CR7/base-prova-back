@@ -11,8 +11,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
         select i from Item i
         where (:busca = '' or locate(lower(:busca), lower(i.titulo)) > 0
             or locate(lower(:busca), lower(i.conteudo)) > 0)
-          and (:categoria = '' or lower(i.categoria) = lower(:categoria))
+          and (:prioridade = '' or lower(i.prioridade) = lower(:prioridade))
         """)
-    Page<Item> pesquisar(@Param("busca") String busca, @Param("categoria") String categoria,
+    Page<Item> pesquisar(@Param("busca") String busca, @Param("prioridade") String prioridade,
                          Pageable pageable);
 }

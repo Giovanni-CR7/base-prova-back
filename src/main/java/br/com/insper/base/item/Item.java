@@ -12,9 +12,11 @@ public class Item {
     @Column(nullable = false, length = 160)
     private String titulo;
     @Column(nullable = false, length = 5000)
-    private String conteudo;
+    private String descricao;
     @Column(nullable = false, length = 80)
-    private String categoria;
+    private String email;
+    @Column(nullable = false, length = 80)
+    private String prioridade;
     @Column(nullable = false, length = 255)
     private String autorId;
     @Column(nullable = false)
@@ -25,10 +27,12 @@ public class Item {
     public Long getId() { return id; }
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
-    public String getConteudo() { return conteudo; }
-    public void setConteudo(String conteudo) { this.conteudo = conteudo; }
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPrioridade() { return prioridade; }
+    public void setPrioridade(String prioridade) { this.prioridade = prioridade; }
     public String getAutorId() { return autorId; }
     public void setAutorId(String autorId) { this.autorId = autorId; }
     public LocalDateTime getCriadoEm() { return criadoEm; }
