@@ -14,8 +14,6 @@ public class Item {
     @Column(nullable = false, length = 5000)
     private String descricao;
     @Column(nullable = false, length = 80)
-    private String email;
-    @Column(nullable = false, length = 80)
     private String prioridade;
     @Column(nullable = false, length = 255)
     private String autorId;
@@ -29,8 +27,6 @@ public class Item {
     public void setTitulo(String titulo) { this.titulo = titulo; }
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
     public String getPrioridade() { return prioridade; }
     public void setPrioridade(String prioridade) { this.prioridade = prioridade; }
     public String getAutorId() { return autorId; }

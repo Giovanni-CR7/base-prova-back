@@ -60,7 +60,6 @@ public class ItemService {
     private void aplicar(Item item, ItemRequest request) {
         item.setTitulo(request.titulo().trim());
         item.setDescricao(request.descricao().trim());
-        item.setEmail(request.email().trim());
         item.setPrioridade(request.prioridade().trim());
     }
 }
