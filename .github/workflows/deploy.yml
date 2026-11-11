@@ -1,0 +1,59 @@
+name: Deploy base prova
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: deploy-base-prova
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Gerar JAR sem testes
+        run: mvn -B clean package -Dmaven.test.skip=true
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/base-prova:${{ github.sha }}
+      - name: Publicar na EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          command_timeout: 10m
+          script: |
+            set -eu
+            command -v curl >/dev/null
+            IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/base-prova:${{ github.sha }}"
+            sudo docker pull "$IMAGE"
+            if sudo docker container inspect base-prova >/dev/null 2>&1; then
+              sudo docker stop base-prova
+              sudo docker rm base-prova
+            fi
+            sudo docker run -d --network host --restart unless-stopped \
+              --name base-prova -e SERVER_PORT=8081 "$IMAGE"
+            for attempt in $(seq 1 60); do
+              STATUS=$(curl --max-time 2 -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8081/itens || true)
+              if [ "$STATUS" = "401" ]; then
+                echo "API respondeu na porta 8081."
+                exit 0
+              fi
+              sleep 2
+            done
+            sudo docker logs --tail 100 base-prova
+            exit 1
