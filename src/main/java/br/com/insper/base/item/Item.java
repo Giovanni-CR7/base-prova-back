@@ -14,6 +14,8 @@ public class Item {
     @Column(nullable = false, length = 5000)
     private String descricao;
     @Column(nullable = false, length = 80)
+    private String email;
+    @Column(nullable = false, length = 80)
     private String prioridade;
     @Column(nullable = false, length = 255)
     private String autorId;
